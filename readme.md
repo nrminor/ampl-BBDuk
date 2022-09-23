@@ -112,9 +112,9 @@ GCTGTGCCAATTGACTGGGTAC
             Amedeo,P., Williams,M., Hu,L. and Suthar,M.S
       - Submitted (25-JUL-2016) J. Craig Venter Institute, 9704 Medical
             Center Drive, Rockville, MD 20850, USA
-  - MiSeq istrument
-  - "TruSeq" setting with read length = 251
-  - Input Fastq Files have been randomly downsampled by 95% prior to uploading, due to github file size limits.
+  - Sequenceing conducted on a Illumina MiSeq instrument
+    - "TruSeq" setting with read length = 251
+    - Input Fastq Files have been randomly downsampled by 95% prior to uploading, due to github file size limits.
   - Publication: 
     - Block, L.N., Schmidt, J.K., Keuler, N.S. et al. Zika virus impacts extracellular vesicle composition and cellular gene expression in macaque early gestation trophoblasts. Sci Rep 12, 7348 (2022). https://doi.org/10.1038/s41598-022-11275-9
 ## Matched-primers paired-read example
