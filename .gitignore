@@ -2,3 +2,6 @@
 .idea/
 .idea
 .idea/vcs.xml
+.DS_Store
+.idea/.DS_Store
+example/.DS_Store
