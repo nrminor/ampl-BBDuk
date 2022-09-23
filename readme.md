@@ -3,6 +3,7 @@
   - It filters reads that do not contain matched primers on both of the paired reads
 - This repository is a wrapper for the bbmap/bbtools bbduk to improvement of identifying valid reads based on the primers
   - reference: https://jgi.doe.gov/data-and-tools/software-tools/bbtools/
+  - reference: BBMap – Bushnell B. – sourceforge.net/projects/bbmap/
 - As ran per the documentation, the bbduk will do a good job of identifying (and optionally trimming) primers based on an inputed primer list
 - However, for paired reads the existing workflow does not identify the reads based on: 
   1. primer being evident in both of the paired reads per the matching criteria
@@ -106,6 +107,11 @@ GCTGTGCCAATTGACTGGGTAC
 - maybe a match_primers flag
 # Example of good and bad reads 
   - using Zikv KX601166.2 strain laboratory sample data
+    - reference: https://www.ncbi.nlm.nih.gov/nuccore/KX601166.2
+      - Shabman,R., Puri,V., Dilley,K., Fedorova,N., Shrivastava,S.,
+            Amedeo,P., Williams,M., Hu,L. and Suthar,M.S
+      - Submitted (25-JUL-2016) J. Craig Venter Institute, 9704 Medical
+            Center Drive, Rockville, MD 20850, USA
   - MiSeq istrument
   - "TruSeq" setting with read length = 251
   - Input Fastq Files have been randomly downsampled by 95% prior to uploading, due to github file size limits.
