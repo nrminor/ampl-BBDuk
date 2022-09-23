@@ -1,4 +1,6 @@
 # BBDuk primer matching
+- This repository is for those conducting sequencing using matched paired end read primers.  
+  - It filters reads that do not contain matched primers on both of the paired reads
 - This repository is a wrapper for the bbmap/bbtools bbduk to improvement of identifying valid reads based on the primers
   - reference: https://jgi.doe.gov/data-and-tools/software-tools/bbtools/
 - As ran per the documentation, the bbduk will do a good job of identifying (and optionally trimming) primers based on an inputed primer list
