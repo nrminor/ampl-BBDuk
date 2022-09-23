@@ -105,7 +105,7 @@ GCTGTGCCAATTGACTGGGTAC
 - It is VERY inefficient, introducing the matched pair criteria directly into bbduk would greatly increase the speed substantially
   - The speed increase would be about (1.5 * primer_pair_count) x, therefore a 40 primer pair system can expect to in <2% of the processing time
 - maybe a match_primers flag
-# Example of good and bad reads 
+# Example of matched and mismatched-primer paired reads 
   - using Zikv KX601166.2 strain laboratory sample data
     - reference: https://www.ncbi.nlm.nih.gov/nuccore/KX601166.2
       - Shabman,R., Puri,V., Dilley,K., Fedorova,N., Shrivastava,S.,
