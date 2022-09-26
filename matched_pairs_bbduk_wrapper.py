@@ -172,7 +172,9 @@ for primer_group, primer_dict in primer_group_path_dict.items():
                                   '-cp', '{0}/current/'.format(bbmap_dir),
                                   'jgi.BBDuk',
                                   'in={}'.format(in_path),
+                                  'in2={}'.format(in2_path),
                                   'outm={}'.format(fasta_left_temp_1),
+                                  'outm2={}'.format(fasta_right_temp_1),
                                   'ref={0}'.format(in_fasta_left_path),
                                   'ktrim={}'.format(ktrim),
                                   'k=21',
@@ -182,22 +184,24 @@ for primer_group, primer_dict in primer_group_path_dict.items():
                                   'rcomp=f',
                                   'minlength=75',
                                   'restrictleft=32',
+                                  'requireBothBad=f',
                                   'overwrite=t'],
                                  shell=False,
                                  stdout=PIPE,
                                  stderr=PIPE)
-    print(ssh_cmd_out)
+    # import os
+    os.write(1, ssh_cmd_out.stderr)
     # run repair again as the threads can put the reads out of order and will be missing in bbduk
-    print('Running repair left: ', primer_group)
-    ssh_cmd_out = subprocess_run(['{0}/repair.sh'.format(bbmap_dir),
-                                  'in={}'.format(fasta_left_temp_1),
-                                  'in2={}'.format(in2_path),
-                                  'out={}'.format(fasta_left_temp_2),
-                                  'out2={}'.format(fasta_right_temp_1)],
-                                 shell=False,
-                                 stdout=PIPE,
-                                 stderr=PIPE)
-    print(ssh_cmd_out)
+    # print('Running repair left: ', primer_group)
+    # ssh_cmd_out = subprocess_run(['{0}/repair.sh'.format(bbmap_dir),
+    #                               'in={}'.format(fasta_left_temp_1),
+    #                               'in2={}'.format(in2_path),
+    #                               'out={}'.format(fasta_left_temp_2),
+    #                               'out2={}'.format(fasta_right_temp_1)],
+    #                              shell=False,
+    #                              stdout=PIPE,
+    #                              stderr=PIPE)
+    # print(ssh_cmd_out)
     # Run bbduk on the reversecomplement matched pair primer of the group
     print('Running bbduk right: ', primer_group)
     ssh_cmd_out = subprocess_run(['java', '-ea',
@@ -205,8 +209,10 @@ for primer_group, primer_dict in primer_group_path_dict.items():
                                   '-Xms{0}m'.format(mem),
                                   '-cp', '{0}/current/'.format(bbmap_dir),
                                   'jgi.BBDuk',
-                                  'in={}'.format(fasta_right_temp_1),
-                                  'outm={}'.format(fasta_right_temp_2),
+                                  'in={}'.format(fasta_left_temp_1),
+                                  'in2={}'.format(fasta_right_temp_1),
+                                  'outm={}'.format(fasta_left_temp_3),
+                                  'outm2={}'.format(fasta_right_temp_3),
                                   'ref={0}'.format(in_fasta_right_path),
                                   'ktrim={}'.format(ktrim),
                                   'k=21',
@@ -216,22 +222,23 @@ for primer_group, primer_dict in primer_group_path_dict.items():
                                   'rcomp=f',
                                   'minlength=75',
                                   'restrictleft=32',
+                                  'requireBothBad=f',
                                   'overwrite=t'],
                                  shell=False,
                                  stdout=PIPE,
                                  stderr=PIPE)
-    print(ssh_cmd_out)
+    os.write(1, ssh_cmd_out.stderr)
     # run repair again as the threads can put the reads out of order and will be missing in bbduk
-    print('Running repair right: ', primer_group)
-    ssh_cmd_out = subprocess_run(['{0}/repair.sh'.format(bbmap_dir),
-                                  'in={}'.format(fasta_left_temp_2),
-                                  'in2={}'.format(fasta_right_temp_2),
-                                  'out={}'.format(fasta_left_temp_3),
-                                  'out2={}'.format(fasta_right_temp_3)],
-                                 shell=False,
-                                 stdout=PIPE,
-                                 stderr=PIPE)
-    print(ssh_cmd_out)
+    # print('Running repair right: ', primer_group)
+    # ssh_cmd_out = subprocess_run(['{0}/repair.sh'.format(bbmap_dir),
+    #                               'in={}'.format(fasta_left_temp_2),
+    #                               'in2={}'.format(fasta_right_temp_2),
+    #                               'out={}'.format(fasta_left_temp_3),
+    #                               'out2={}'.format(fasta_right_temp_3)],
+    #                              shell=False,
+    #                              stdout=PIPE,
+    #                              stderr=PIPE)
+    # print(ssh_cmd_out)
 
 # concatenate the  primer grouped fastq files into a single file for each direction
 print('Concatenating files to create a single file')

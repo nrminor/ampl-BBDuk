@@ -56,7 +56,7 @@ out=/Volumes/drive1/bbduk_primer_matching/example/zikv_dak_matched_merge.fastq.g
 java -ea -Xmx8000m -Xms8000m -cp /bin/bbmap/current/ align2.BBMap build=1 \
 in=/Volumes/drive1/bbduk_primer_matching/example/zikv_dak_matched_merge.fastq.gz \
 ref=/Volumes/drive1/bbduk_primer_matching/example/KX601166.2.fasta \
-outm=/Volumes/drive1/bbduk_primer_matching/example/zikv_dak_matched_merge.bam \
+outm=/Volumes/drive1/bbduk_primer_matching/example/zikv_dak_matched_merge.bam
 
 ```
 ## required python packages:
