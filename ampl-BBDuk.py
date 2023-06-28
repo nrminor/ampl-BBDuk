@@ -77,7 +77,8 @@ def get_process_arrays_args():
 
 # get the arguments
 args = get_process_arrays_args()
-# save arguments to local variable by same name as the argument
+
+# save arguments to global variables by same names
 primer_fasta = args.primer_fasta
 in_path = args.in_path
 in2_path = args.in2_path
@@ -90,13 +91,13 @@ ktrim = args.ktrim
 if temp_dir is None:
     temp_dir = os.path.join(os.path.dirname(outm), 'TMP')
 
-# way to concat fastq.gz in python, might not be the most efficient
+# function that concatenates fastq.gz in script. NOTE: this block will be removed in future implementations of this script.
 def concat_fastq_gz(input_fastq_filepath, out_file):
     fastq_sequences = FastqGeneralIterator(gzip.open(input_fastq_filepath, "rt"))
     for (f_id, f_seq, f_q) in fastq_sequences:
         out_file.write('@{0}\n{1}\n+\n{2}\n'.format(f_id, f_seq, f_q))
 
-
+# function that uses the primer file to define which primers are part of which amplicons, and outputs a dictionary 
 def fasta_groups_to_dict(fasta_path):
 
     primer_fasta_dict = {}
@@ -118,7 +119,7 @@ def fasta_groups_to_dict(fasta_path):
         primer_fasta_dict[primer_group][primer_direction] = fastq_list
     return primer_fasta_dict
 
-
+# function that splits primer sequences into separate, per-amplicon FASTA files
 def dict_to_grouped_fastas(grouped_fasta_dir,
                            grouped_fasta_dict):
     primer_group_path_dict ={}
@@ -134,10 +135,12 @@ def dict_to_grouped_fastas(grouped_fasta_dir,
                     out_file.write('{0}\n'.format(fasta_data[1]))
 
     return primer_group_path_dict
+
 # create the required directories for outputting files
 os.makedirs(temp_dir, exist_ok=True)
 grouped_fasta_dir = os.path.join(temp_dir,'single_fasta')
 os.makedirs(grouped_fasta_dir, exist_ok=True)
+
 # Create grouped fasta files for the forward and reverse primer pairs.
 # create an iterable dictionary of paths.
 grouped_fasta_dict = fasta_groups_to_dict(primer_fasta)
