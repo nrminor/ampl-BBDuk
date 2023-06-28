@@ -1,4 +1,4 @@
-# BBDuk primer matching
+# Python BBDuk Wrapper for Filtering Paired Reads to Complete, 2-primer Amplicons
 - This repository is for those conducting sequencing using matched paired end read primers.  
   - It filters reads that do not contain matched primers on both of the paired reads
 - This repository is a wrapper for the bbmap/bbtools bbduk to improvement of identifying valid reads based on the primers
