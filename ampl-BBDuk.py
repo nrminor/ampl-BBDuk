@@ -5,6 +5,7 @@ from argparse import ArgumentParser, ArgumentTypeError
 from subprocess import Popen, PIPE, run as subprocess_run
 import gzip
 
+# define function that parses boolean command line argument strings into true booleans
 def str2bool(v):
     if isinstance(v, bool):
         return v
@@ -15,7 +16,7 @@ def str2bool(v):
     else:
         raise ArgumentTypeError('Boolean value expected.')
 
-
+# define a function that parses all command line arguments for thia module
 def parse_process_arrays_args(parser: ArgumentParser):
     """Parses the python script arguments from bash and makes sure files/inputs are valid"""
     parser.add_argument('--primer_fasta',
@@ -63,7 +64,7 @@ def parse_process_arrays_args(parser: ArgumentParser):
                         default='f',
                         required=False)
 
-
+# define a function that accesses command line arguments using the previous function
 def get_process_arrays_args():
     """	Inputs arguments from bash
     Gets the arguments, checks requirements, returns a dictionary of arguments
@@ -74,9 +75,9 @@ def get_process_arrays_args():
     args = parser.parse_args()
     return args
 
-
+# get the arguments
 args = get_process_arrays_args()
-# same arguments to a local variable by same name as the argument
+# save arguments to local variable by same name as the argument
 primer_fasta = args.primer_fasta
 in_path = args.in_path
 in2_path = args.in2_path
