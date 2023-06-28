@@ -1,0 +1,27 @@
+# Use the lightweight Alpine image as the base
+FROM alpine:latest
+
+# Add Python and pip to the image
+RUN apk add --no-cache python3 py3-pip gzip
+
+# Ensure Python & pip are up to date
+RUN python3 -m ensurepip && \
+    pip3 install --upgrade pip setuptools
+
+# Install the required Python modules
+RUN pip3 install biopython argparse
+
+# Install BBMap
+RUN apk add --no-cache wget bash
+RUN mkdir /bbmap && cd /bbmap
+RUN wget https://sourceforge.net/projects/bbmap/files/latest/download -O bbmap.tar.gz && \
+    tar -xzf bbmap.tar.gz && \
+    rm bbmap.tar.gz && \
+    cd bbmap && \
+    bash build.sh
+
+# Add bbmap to path
+ENV PATH="/bbmap:${PATH}"
+
+# Default command to execute when the container starts
+CMD [ "python3" ]
