@@ -23,5 +23,10 @@ RUN wget https://sourceforge.net/projects/bbmap/files/latest/download -O bbmap.t
 # Add bbmap to path
 ENV PATH="/bbmap:${PATH}"
 
+# Install PyPy
+RUN apk add --no-cache pypy3
+RUN pypy3 -m ensurepip
+RUN pypy3 -m pip install biopython argparse
+
 # Default command to execute when the container starts
-CMD [ "python3" ]
+CMD [ "bash" ]
