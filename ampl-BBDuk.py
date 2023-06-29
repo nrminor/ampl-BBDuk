@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 from Bio import SeqIO
 from Bio.SeqIO.QualityIO import FastqGeneralIterator
 import os
@@ -5,8 +7,18 @@ from argparse import ArgumentParser, ArgumentTypeError
 from subprocess import Popen, PIPE, run as subprocess_run
 import gzip
 
+
+
+### METHOD DEFINITIONS ###
+### ------------------------------------------------------------------------------ ###
+
 # define function that parses boolean command line argument strings into true booleans
 def str2bool(v):
+    """
+    Standard function used across many D.A. Baker scripts for parsing command
+    line argument strings into true boolean objects
+    """
+    
     if isinstance(v, bool):
         return v
     if v.lower() in ('yes', 'true', 't', 'y', '1'):
@@ -18,7 +30,11 @@ def str2bool(v):
 
 # define a function that parses all command line arguments for thia module
 def parse_process_arrays_args(parser: ArgumentParser):
-    """Parses the python script arguments from bash and makes sure files/inputs are valid"""
+    """
+    Parses the python script arguments from bash and makes sure files/inputs 
+    are valid
+    """
+    
     parser.add_argument('--primer_fasta',
                         type=str,
                         help='where fasta primer, headers must be nomenclature: \n\
@@ -33,8 +49,7 @@ def parse_process_arrays_args(parser: ArgumentParser):
     parser.add_argument('--in2_path',
                         type=str,
                         help='input path to reverse-complement paired reads.',
-                        required=True)
-
+                        required=False)
     parser.add_argument('--outm',
                         type=str,
                         help='output path to output_path forwared reads',
@@ -42,7 +57,7 @@ def parse_process_arrays_args(parser: ArgumentParser):
     parser.add_argument('--outm2',
                         type=str,
                         help='output path to reverse-complement paired reads',
-                        required=True)
+                        required=False)
     parser.add_argument('--temp_dir',
                         type=str,
                         help='path to intermediate files',
@@ -56,7 +71,7 @@ def parse_process_arrays_args(parser: ArgumentParser):
     parser.add_argument('--bbmap_dir',
                         type=str,
                         help='dir where bbmap tools are located',
-                        default='/bin/bbmap',
+                        default='/bbmap',
                         required=False)
     parser.add_argument('--ktrim',
                         type=str,
@@ -66,39 +81,32 @@ def parse_process_arrays_args(parser: ArgumentParser):
 
 # define a function that accesses command line arguments using the previous function
 def get_process_arrays_args():
-    """	Inputs arguments from bash
-    Gets the arguments, checks requirements, returns a dictionary of arguments
+    """
+    Retrieves input arguments from bash, checks requirements, returns a dictionary of arguments
     Return: args - Arguments as a dictionary
     """
+    
     parser = ArgumentParser()
     parse_process_arrays_args(parser)
     args = parser.parse_args()
     return args
 
-# get the arguments
-args = get_process_arrays_args()
-
-# save arguments to global variables by same names
-primer_fasta = args.primer_fasta
-in_path = args.in_path
-in2_path = args.in2_path
-outm = args.outm
-outm2 = args.outm2
-temp_dir = args.temp_dir
-mem = args.mem
-bbmap_dir = args.bbmap_dir
-ktrim = args.ktrim
-if temp_dir is None:
-    temp_dir = os.path.join(os.path.dirname(outm), 'TMP')
-
 # function that concatenates fastq.gz in script. NOTE: this block will be removed in future implementations of this script.
 def concat_fastq_gz(input_fastq_filepath, out_file):
+    """
+    This method loops through each FASTQ.gz file and unzips it into a new FASTQ. This will likely
+    be removed in future versions to keep file I/O more lightweight.
+    """
+    
     fastq_sequences = FastqGeneralIterator(gzip.open(input_fastq_filepath, "rt"))
     for (f_id, f_seq, f_q) in fastq_sequences:
         out_file.write('@{0}\n{1}\n+\n{2}\n'.format(f_id, f_seq, f_q))
 
 # function that uses the primer file to define which primers are part of which amplicons, and outputs a dictionary 
 def fasta_groups_to_dict(fasta_path):
+    """
+    This method assigns a group number to each primer pair
+    """
 
     primer_fasta_dict = {}
     fasta_sequences = SeqIO.parse(open(fasta_path), 'fasta')
@@ -121,6 +129,10 @@ def fasta_groups_to_dict(fasta_path):
 
 # function that splits primer sequences into separate, per-amplicon FASTA files
 def dict_to_grouped_fastas(grouped_fasta_dir, grouped_fasta_dict):
+    """
+    This method sorts the primers by amplicon group
+    """
+    
     primer_group_path_dict ={}
     for primer_group, primer_direction_dict in grouped_fasta_dict.items():
         for primer_direction, fasta_data_list in primer_direction_dict.items():
@@ -134,6 +146,29 @@ def dict_to_grouped_fastas(grouped_fasta_dir, grouped_fasta_dict):
                     out_file.write('{0}\n'.format(fasta_data[1]))
 
     return primer_group_path_dict
+
+### ------------------------------------------------------------------------------ ###
+
+
+
+### RUNNING THE WORKFLOW ###
+### ------------------------------------------------------------------------------ ###
+
+# get the arguments
+args = get_process_arrays_args()
+
+# save arguments to global variables by same names
+primer_fasta = args.primer_fasta
+in_path = args.in_path
+in2_path = args.in2_path
+outm = args.outm
+outm2 = args.outm2
+temp_dir = args.temp_dir
+mem = args.mem
+bbmap_dir = args.bbmap_dir
+ktrim = args.ktrim
+if temp_dir is None:
+    temp_dir = os.path.join(os.path.dirname(outm), 'TMP')
 
 # create the required directories for outputting files
 os.makedirs(temp_dir, exist_ok=True)
@@ -255,5 +290,5 @@ with gzip.open(outm2, 'wt') as out_file:
         concat_fastq_gz(right_outpath, out_file)
         print(right_outpath)
 
-
+### ------------------------------------------------------------------------------ ###
 
