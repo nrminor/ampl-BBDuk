@@ -8,6 +8,6 @@ ampl-BBDuk.py \
 --in_path sample_L001_R1_001.fastq.gz \
 --in2_path sample_L001_R2_001.fastq.gz \
 --outm sample_amplicons_r1.fastq.gz \
---outm2 sample_amplicons_r1.fastq.gz \
+--outm2 sample_amplicons_r2.fastq.gz \
 --ktrim t
 ```
